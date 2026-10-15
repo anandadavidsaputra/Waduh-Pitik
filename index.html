@@ -1,0 +1,960 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>Waduh Pitik 🐔</title>
+    <link rel="icon" type="image/png" href="logo.png" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --cream: #fff5d9;
+        --green: #1a2b22;
+        --gold: #ffd15c;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #101a15;
+        color: var(--cream);
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      header {
+        width: min(100% - 24px, 936px);
+        margin: 14px 12px 5px;
+        padding: 15px 17px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        background: linear-gradient(
+          125deg,
+          #203b2b 0%,
+          #15281e 58%,
+          #30442b 100%
+        );
+        border: 1px solid #668253;
+        border-radius: 20px;
+        box-shadow:
+          0 8px 24px #0005,
+          inset 0 1px #ffffff12;
+        position: relative;
+        overflow: hidden;
+      }
+      header::before {
+        content: "";
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        border: 20px solid #ffd15c0d;
+        border-radius: 50%;
+        right: 28%;
+        top: -100px;
+        pointer-events: none;
+      }
+      .brand-block {
+        position: relative;
+        z-index: 1;
+        min-width: 190px;
+      }
+      .title-lockup {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .brand-mark {
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle at 30% 25%,
+          #fff0b2,
+          #ffd15c 65%,
+          #d99b2b
+        );
+        border: 2px solid #fff0b2;
+        box-shadow:
+          0 3px 0 #76521d,
+          0 0 18px #ffd15c20;
+        font-size: 25px;
+      }
+      h1 {
+        font-size: clamp(1.25rem, 4vw, 1.85rem);
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+        margin: 0;
+        color: #fff5d9;
+        text-shadow: 0 2px 0 #0004;
+      }
+      .sub {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 9px;
+        padding: 6px 11px;
+        border-radius: 8px 14px 14px 8px;
+        background: linear-gradient(90deg, #ffd15c, #f5b83f);
+        color: #34240b;
+        border-left: 4px solid #fff0b2;
+        box-shadow: 0 3px 0 #8d6424;
+        font-size: 0.79rem;
+        font-weight: 950;
+        letter-spacing: 0.025em;
+      }
+      .sub::before {
+        content: "✦";
+        font-size: 0.9rem;
+      }
+      .hud {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .pill {
+        background: #0e1e16a8;
+        border: 1px solid #7d9b68;
+        border-radius: 12px;
+        padding: 9px 11px;
+        font-size: 0.84rem;
+        font-weight: 850;
+        font-variant-numeric: tabular-nums;
+        box-shadow: inset 0 1px #ffffff0b;
+      }
+      @media (max-width: 520px) {
+        header {
+          padding: 13px;
+          gap: 12px;
+        }
+        .brand-block {
+          width: 100%;
+        }
+        .hud {
+          width: 100%;
+          justify-content: stretch;
+        }
+        .pill {
+          flex: 1 1 auto;
+          text-align: center;
+          padding: 8px 7px;
+          font-size: 0.78rem;
+        }
+        .sub {
+          font-size: 0.75rem;
+        }
+      }
+      main {
+        width: min(100%, 960px);
+        padding: 8px 12px 18px;
+      }
+      .frame {
+        position: relative;
+        border: 2px solid #56784f;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 15px 45px #0006;
+        background: #9ad778;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: auto;
+        touch-action: none;
+      }
+      .overlay {
+        position: absolute;
+        inset: 0;
+        background: #0a1812b8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+      .overlay.hidden {
+        display: none;
+      }
+      .card {
+        width: min(100%, 440px);
+        padding: 21px;
+        border-radius: 18px;
+        background: #17271ff5;
+        border: 1px solid #78956b;
+        text-align: center;
+        box-shadow: 0 12px 35px #0006;
+      }
+      .card h2 {
+        margin: 0 0 8px;
+        font-size: clamp(1.4rem, 4vw, 2rem);
+        letter-spacing: 0.02em;
+      }
+      .card p {
+        line-height: 1.5;
+        color: #e6eddc;
+      }
+      .card.game-over-card {
+        width: min(100%, 490px);
+        padding: clamp(18px, 4vw, 28px);
+        background:
+          radial-gradient(ellipse at top, #304c36 0%, transparent 58%),
+          linear-gradient(145deg, #18271f 0%, #101b16 100%);
+        border: 1px solid #c7a75b;
+        box-shadow:
+          0 0 0 1px #d6b65a22,
+          0 18px 60px #000b,
+          0 0 34px #e4b84a18;
+        animation: cardEnter 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      }
+      .result-kicker {
+        color: #e9c96d;
+        font-size: 0.72rem;
+        font-weight: 900;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+      }
+      .result-score {
+        margin: 8px 0 2px;
+        color: #ffe18a;
+        font-size: clamp(3.2rem, 12vw, 5.2rem);
+        line-height: 0.98;
+        font-weight: 1000;
+        letter-spacing: -0.06em;
+        font-variant-numeric: tabular-nums;
+        text-shadow: 0 0 28px #ffc94d55;
+      }
+      .result-unit {
+        color: #e8d8a7;
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+      }
+      .result-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin: 14px 0 4px;
+        padding: 7px 12px;
+        border: 1px solid #b99b4f88;
+        border-radius: 999px;
+        color: #ffe7a1;
+        background: #c79c2b1c;
+        font-size: 0.8rem;
+        font-weight: 900;
+      }
+      .result-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+        margin: 18px 0;
+      }
+      .result-stat {
+        padding: 12px 10px;
+        border-radius: 13px;
+        background: #ffffff08;
+        border: 1px solid #ffffff16;
+      }
+      .result-stat span {
+        display: block;
+        color: #b7c6b4;
+        font-size: 0.72rem;
+        font-weight: 750;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+      .result-stat strong {
+        display: block;
+        margin-top: 5px;
+        color: #fff7df;
+        font-size: 1.25rem;
+        font-weight: 950;
+        font-variant-numeric: tabular-nums;
+      }
+      .new-record {
+        display: none;
+        margin: 12px 0 0;
+        color: #ffe18a;
+        font-size: 0.85rem;
+        font-weight: 950;
+        letter-spacing: 0.08em;
+        animation: recordPulse 1.1s ease-in-out infinite alternate;
+      }
+      .new-record.show {
+        display: block;
+      }
+      .card.game-over-card .result-message {
+        margin: 12px 0 18px;
+        font-size: 0.9rem;
+      }
+      .card.game-over-card .tools {
+        margin-top: 0;
+      }
+      .card.game-over-card #start {
+        min-width: 165px;
+        background: linear-gradient(135deg, #ffe69a, #e7b83f);
+        box-shadow: 0 5px 20px #e3b64426;
+      }
+      @keyframes cardEnter {
+        from {
+          opacity: 0;
+          transform: translateY(14px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      @keyframes recordPulse {
+        from {
+          text-shadow: 0 0 4px #ffd15c22;
+        }
+        to {
+          text-shadow: 0 0 15px #ffd15cbb;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .card.game-over-card,
+        .new-record.show {
+          animation: none;
+        }
+      }
+      button,
+      .upload {
+        border: 0;
+        border-radius: 12px;
+        padding: 11px 14px;
+        background: var(--gold);
+        color: #38280a;
+        font: inherit;
+        font-weight: 850;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+      .secondary {
+        background: #365343;
+        color: #fff5d9;
+      }
+      .tools {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .note {
+        text-align: center;
+        color: #c1d0bf;
+        font-size: 0.84rem;
+        line-height: 1.5;
+        margin: 12px 4px;
+      }
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(60px, 84px));
+        grid-template-rows: repeat(2, 50px);
+        gap: 6px;
+        justify-content: center;
+        margin: 12px auto 0;
+      }
+      .controls button {
+        padding: 5px;
+        font-size: 1.15rem;
+        border-radius: 13px;
+      }
+      .up {
+        grid-column: 2;
+        grid-row: 1;
+      }
+      .left {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      .down {
+        grid-column: 2;
+        grid-row: 2;
+      }
+      .right {
+        grid-column: 3;
+        grid-row: 2;
+      }
+      @media (min-width: 700px) {
+        .controls {
+          grid-template-columns: repeat(4, 75px);
+          grid-template-rows: 50px;
+        }
+        .up {
+          grid-column: 2;
+          grid-row: 1;
+        }
+        .left {
+          grid-column: 1;
+          grid-row: 1;
+        }
+        .down {
+          grid-column: 3;
+          grid-row: 1;
+        }
+        .right {
+          grid-column: 4;
+          grid-row: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand-block">
+        <div class="title-lockup">
+          <div class="brand-mark" aria-hidden="true">🐔</div>
+          <h1>Waduh Pitik</h1>
+        </div>
+        <div class="sub">Hidup Tenang Cuma Mitos</div>
+      </div>
+      <div class="hud">
+        <div class="pill">⏱️ Waktu <span id="time">0.0</span>s</div>
+        <div class="pill">🏆 Rekor <span id="best">0.0</span>s</div>
+        <div class="pill">🐔 Jarak <span id="distance">—</span></div>
+      </div>
+    </header>
+    <main>
+      <div class="frame">
+        <canvas id="game" width="900" height="560"></canvas>
+        <div class="overlay" id="overlay">
+          <div class="card" id="resultCard">
+            <h2 id="title">AYAMNYA NGAMUK! 🐔</h2>
+            <p id="desc">
+              Kabur dari ayam yang terus mengejar posisimu. Kamu bebas bergerak
+              ke segala arah — bukan endless runner. Bertahan selama mungkin!
+            </p>
+            <div id="resultPanel" hidden>
+              <div class="result-kicker">TOTAL SURVIVAL TIME</div>
+              <div class="result-score" id="finalScore">0.0</div>
+              <div class="result-unit">DETIK BERTAHAN</div>
+              <div class="result-badge" id="rankBadge">🏅 JAGO KABUR</div>
+              <div class="new-record" id="newRecord">✦ REKOR BARU! ✦</div>
+              <div class="result-grid">
+                <div class="result-stat">
+                  <span>Rekor pribadi</span
+                  ><strong id="resultBest">0.0s</strong>
+                </div>
+                <div class="result-stat">
+                  <span>Jarak terakhir</span
+                  ><strong id="resultDistance">0 px</strong>
+                </div>
+              </div>
+              <p class="result-message" id="resultMessage"></p>
+            </div>
+            <button id="start">MULAI KABUR!</button>
+          </div>
+        </div>
+      </div>
+      <div class="controls" aria-label="Kontrol gerak">
+        <button class="up secondary" data-dir="up">⬆️</button
+        ><button class="left secondary" data-dir="left">⬅️</button
+        ><button class="down secondary" data-dir="down">⬇️</button
+        ><button class="right secondary" data-dir="right">➡️</button>
+      </div>
+      <p class="note">
+        PC: gunakan <b>WASD</b> atau tombol panah untuk lari bebas ke segala
+        arah. HP: tahan tombol panah di bawah. Ayam akan memburu posisi kamu
+        terus-menerus; jangan sampai tersentuh!
+      </p>
+    </main>
+    <script>
+      (() => {
+        const canvas = document.getElementById("game"),
+          ctx = canvas.getContext("2d"),
+          W = canvas.width,
+          H = canvas.height;
+        const $ = (id) => document.getElementById(id);
+        let running = false,
+          last = 0,
+          elapsed = 0,
+          best = Number(localStorage.getItem("ayamBarbarBest") || 0);
+        const faceImg = new Image();
+        let faceReady = false;
+        faceImg.onload = () => {
+          faceReady = true;
+        };
+        faceImg.onerror = () => {
+          faceReady = false;
+        };
+        faceImg.src = "face.jpg"; // Letakkan foto wajah di folder yang sama dengan index.html.
+        $("best").textContent = best.toFixed(1);
+        const player = { x: W * 0.28, y: H * 0.55, r: 22, speed: 245 };
+        const chicken = { x: W * 0.76, y: H * 0.3, r: 31, speed: 95 };
+        const keys = { up: false, down: false, left: false, right: false };
+        let hitFlash = 0,
+          particles = [];
+        let lastDistance = 0;
+        function clamp(v, a, b) {
+          return Math.max(a, Math.min(b, v));
+        }
+        function roundRect(x, y, w, h, r, fill, stroke) {
+          ctx.beginPath();
+          ctx.roundRect(x, y, w, h, r);
+          if (fill) {
+            ctx.fillStyle = fill;
+            ctx.fill();
+          }
+          if (stroke) {
+            ctx.strokeStyle = stroke;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+          }
+        }
+        function drawGrass() {
+          const g = ctx.createLinearGradient(0, 0, 0, H);
+          g.addColorStop(0, "#9cdb79");
+          g.addColorStop(1, "#6ab85f");
+          ctx.fillStyle = g;
+          ctx.fillRect(0, 0, W, H);
+          // patches
+          for (let i = 0; i < 70; i++) {
+            let x = (i * 137 + 43) % W,
+              y = (i * 83 + 21) % H;
+            ctx.fillStyle = i % 2 ? "#b7e68b66" : "#4d9c4c44";
+            ctx.beginPath();
+            ctx.ellipse(x, y, 12, 5, (i % 5) * 0.3, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          // arena fence
+          ctx.strokeStyle = "#8d5c32";
+          ctx.lineWidth = 13;
+          ctx.strokeRect(18, 18, W - 36, H - 36);
+          ctx.strokeStyle = "#d3a06a";
+          ctx.lineWidth = 4;
+          ctx.strokeRect(27, 27, W - 54, H - 54);
+          for (let x = 35; x < W - 30; x += 46) {
+            ctx.strokeStyle = "#8d5c32";
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(x, 20);
+            ctx.lineTo(x, 42);
+            ctx.moveTo(x, H - 20);
+            ctx.lineTo(x, H - 42);
+            ctx.stroke();
+          }
+          for (let y = 35; y < H - 30; y += 46) {
+            ctx.strokeStyle = "#8d5c32";
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(20, y);
+            ctx.lineTo(42, y);
+            ctx.moveTo(W - 20, y);
+            ctx.lineTo(W - 42, y);
+            ctx.stroke();
+          }
+          // hay bales as cover/obstacles but passable
+          [
+            [150, 130],
+            [W - 170, 145],
+            [W * 0.49, H - 105],
+            [155, H - 120],
+            [W - 150, H - 125],
+          ].forEach(([x, y]) => {
+            ctx.fillStyle = "#c99a3c";
+            roundRect(x - 22, y - 14, 44, 28, 7, "#c99a3c", "#f1d278");
+            ctx.strokeStyle = "#f1d278";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(x - 9, y - 12);
+            ctx.lineTo(x - 9, y + 12);
+            ctx.moveTo(x + 8, y - 12);
+            ctx.lineTo(x + 8, y + 12);
+            ctx.stroke();
+          });
+        }
+        function drawPlayer() {
+          ctx.fillStyle = "#0003";
+          ctx.beginPath();
+          ctx.ellipse(player.x, player.y + 25, 27, 9, 0, 0, Math.PI * 2);
+          ctx.fill();
+          // body
+          roundRect(
+            player.x - 19,
+            player.y - 1,
+            38,
+            40,
+            10,
+            "#e8a53b",
+            "#fff0c5",
+          );
+          ctx.strokeStyle = "#2c436b";
+          ctx.lineWidth = 8;
+          ctx.lineCap = "round";
+          ctx.beginPath();
+          ctx.moveTo(player.x - 8, player.y + 32);
+          ctx.lineTo(player.x - 14, player.y + 44);
+          ctx.moveTo(player.x + 8, player.y + 32);
+          ctx.lineTo(player.x + 14, player.y + 44);
+          ctx.stroke();
+          ctx.strokeStyle = "#e8a53b";
+          ctx.lineWidth = 7;
+          ctx.beginPath();
+          ctx.moveTo(player.x - 16, player.y + 7);
+          ctx.lineTo(player.x - 28, player.y + 18);
+          ctx.moveTo(player.x + 16, player.y + 7);
+          ctx.lineTo(player.x + 28, player.y + 18);
+          ctx.stroke();
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(player.x, player.y - 13, 22, 0, Math.PI * 2);
+          ctx.clip();
+          if (faceReady) {
+            const iw = faceImg.naturalWidth,
+              ih = faceImg.naturalHeight,
+              s = Math.max(44 / iw, 44 / ih),
+              sw = 44 / s,
+              sh = 44 / s;
+            ctx.drawImage(
+              faceImg,
+              (iw - sw) / 2,
+              (ih - sh) / 2,
+              sw,
+              sh,
+              player.x - 22,
+              player.y - 35,
+              44,
+              44,
+            );
+          } else {
+            ctx.fillStyle = "#efbd8c";
+            ctx.fillRect(player.x - 22, player.y - 35, 44, 44);
+            ctx.fillStyle = "#33271e";
+            ctx.beginPath();
+            ctx.arc(player.x - 8, player.y - 16, 3, 0, Math.PI * 2);
+            ctx.arc(player.x + 8, player.y - 16, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "#7a3228";
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.arc(player.x, player.y - 10, 9, 0.15, Math.PI - 0.15);
+            ctx.stroke();
+            ctx.fillStyle = "#30251e";
+            ctx.beginPath();
+            ctx.arc(player.x, player.y - 25, 21, Math.PI, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+          ctx.strokeStyle = "#fff5d9";
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.arc(player.x, player.y - 13, 22, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        function drawChicken() {
+          const dx = player.x - chicken.x,
+            dy = player.y - chicken.y,
+            ang = Math.atan2(dy, dx);
+          ctx.save();
+          ctx.translate(chicken.x, chicken.y);
+          ctx.rotate(ang);
+          ctx.fillStyle = "#0003";
+          ctx.beginPath();
+          ctx.ellipse(-2, 24, 37, 10, 0, 0, Math.PI * 2);
+          ctx.fill();
+          // tail feathers behind body
+          ctx.fillStyle = "#fff2d0";
+          for (let i = 0; i < 3; i++) {
+            ctx.beginPath();
+            ctx.ellipse(-28, -10 + i * 10, 13, 8, -0.3, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.fillStyle = "#fff2d0";
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 34, 27, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#e8d5a7";
+          ctx.beginPath();
+          ctx.ellipse(-7, 1, 19, 13, -0.2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#fff2d0";
+          ctx.beginPath();
+          ctx.arc(20, -20, 20, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#d9433b";
+          ctx.beginPath();
+          ctx.arc(10, -39, 7, 0, Math.PI * 2);
+          ctx.arc(20, -42, 8, 0, Math.PI * 2);
+          ctx.arc(30, -37, 7, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#f1a52b";
+          ctx.beginPath();
+          ctx.moveTo(37, -20);
+          ctx.lineTo(55, -14);
+          ctx.lineTo(37, -8);
+          ctx.closePath();
+          ctx.fill();
+          ctx.fillStyle = "#fff";
+          ctx.beginPath();
+          ctx.arc(25, -24, 5.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#1c201a";
+          ctx.beginPath();
+          ctx.arc(27, -24, 2.8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#62332a";
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(19, -31);
+          ctx.lineTo(30, -28);
+          ctx.stroke();
+          ctx.strokeStyle = "#e58b24";
+          ctx.lineWidth = 5;
+          ctx.lineCap = "round";
+          ctx.beginPath();
+          ctx.moveTo(-8, 21);
+          ctx.lineTo(-10, 31);
+          ctx.lineTo(-19, 31);
+          ctx.moveTo(13, 21);
+          ctx.lineTo(16, 31);
+          ctx.lineTo(25, 31);
+          ctx.stroke();
+          ctx.restore();
+          // tracking line, purely visual
+        }
+        function update(dt) {
+          if (!running) return;
+          elapsed += dt;
+          const dx = (keys.right ? 1 : 0) - (keys.left ? 1 : 0),
+            dy = (keys.down ? 1 : 0) - (keys.up ? 1 : 0),
+            len = Math.hypot(dx, dy) || 1;
+          player.x = clamp(
+            player.x + (dx / len) * player.speed * dt,
+            52,
+            W - 52,
+          );
+          player.y = clamp(
+            player.y + (dy / len) * player.speed * dt,
+            58,
+            H - 58,
+          );
+          // chicken AI: chase the player's current position continuously, accelerating over time
+          const vx = player.x - chicken.x,
+            vy = player.y - chicken.y,
+            d = Math.hypot(vx, vy) || 1;
+          // Ayam makin cepat selama 35 detik, lalu menetap di kecepatan maksimum.
+          // Kecepatan maksimum tetap sedikit di bawah kecepatan pemain agar masih
+          // ada peluang untuk mempertahankan skor dengan gerakan yang cerdas.
+
+          // AI ayam: makin lama makin agresif
+          const speedRamp = Math.min(1, elapsed / 30);
+          chicken.speed = 105 + 125 * speedRamp * speedRamp;
+
+          // Prediksi arah lari pemain
+          const predictTime = 0.12 + speedRamp * 0.32;
+          const moveX = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
+          const moveY = (keys.down ? 1 : 0) - (keys.up ? 1 : 0);
+          const moveLen = Math.hypot(moveX, moveY) || 1;
+
+          const targetX =
+            player.x + (moveX / moveLen) * player.speed * predictTime;
+          const targetY =
+            player.y + (moveY / moveLen) * player.speed * predictTime;
+
+          const chaseX = targetX - chicken.x;
+          const chaseY = targetY - chicken.y;
+          const chaseLen = Math.hypot(chaseX, chaseY) || 1;
+
+          chicken.x = clamp(
+            chicken.x + (chaseX / chaseLen) * chicken.speed * dt,
+            48,
+            W - 48,
+          );
+
+          chicken.y = clamp(
+            chicken.y + (chaseY / chaseLen) * chicken.speed * dt,
+            48,
+            H - 48,
+          );
+
+          chicken.x = clamp(
+            chicken.x + (vx / d) * chicken.speed * dt,
+            48,
+            W - 48,
+          );
+          chicken.y = clamp(
+            chicken.y + (vy / d) * chicken.speed * dt,
+            48,
+            H - 48,
+          );
+          const distance = Math.max(0, Math.round(d));
+          lastDistance = distance;
+          $("time").textContent = elapsed.toFixed(1);
+          $("distance").textContent = distance + " px";
+          hitFlash = Math.max(0, hitFlash - dt);
+          if (d < player.r + chicken.r - 2) {
+            endGame();
+          }
+        }
+        function draw() {
+          drawGrass();
+          // a little sweat / urgency near chicken
+          const d = Math.hypot(player.x - chicken.x, player.y - chicken.y);
+          if (d < 180) {
+            ctx.strokeStyle = "#fff5d9";
+            ctx.lineWidth = 3;
+            ctx.setLineDash([7, 7]);
+            ctx.beginPath();
+            ctx.moveTo(player.x, player.y);
+            ctx.lineTo(chicken.x, chicken.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+          }
+          drawPlayer();
+          drawChicken();
+          roundRect(38, 38, 205, 46, 12, "#193b29dd", "#d6edb8");
+          ctx.fillStyle = "#fff7df";
+          ctx.font = "bold 15px system-ui";
+          ctx.fillText("AYAM LAGI MEMBURU!", 51, 66);
+          if (d < 155) {
+            ctx.fillStyle = "#b3231d";
+            ctx.font = "900 25px system-ui";
+            ctx.textAlign = "center";
+            ctx.fillText("KABUR BROOO!!", W / 2, 78);
+            ctx.textAlign = "left";
+          }
+          if (hitFlash > 0) {
+            ctx.fillStyle = "#ff292933";
+            ctx.fillRect(0, 0, W, H);
+          }
+        }
+        function endGame() {
+          running = false;
+          const isNewRecord = elapsed > best;
+          if (isNewRecord) {
+            best = elapsed;
+            localStorage.setItem("ayamBarbarBest", best.toFixed(1));
+            $("best").textContent = best.toFixed(1);
+          }
+
+          const rank =
+            elapsed >= 60
+              ? [
+                  "👑",
+                  "LEGENDA KANDANG",
+                  "Ayamnya sampai butuh cuti buat ngejar kamu.",
+                ]
+              : elapsed >= 35
+                ? [
+                    "🔥",
+                    "AYAM SLAYER",
+                    "Refleksmu lumayan bikin unggas itu emosi.",
+                  ]
+                : elapsed >= 15
+                  ? [
+                      "⚡",
+                      "JAGO KABUR",
+                      "Lumayan! Coba gerak zig-zag dan manfaatkan seluruh arena.",
+                    ]
+                  : [
+                      "🐣",
+                      "KORBAN PATOK",
+                      "Pemanasan dulu. Jangan lari lurus terlalu lama!",
+                    ];
+
+          $("resultCard").classList.add("game-over-card");
+          $("title").textContent = "KENA PATOK!";
+          $("desc").textContent = "AYAM BARBAR BERHASIL MENANGKAPMU";
+          $("desc").style.display = "none";
+          $("resultPanel").hidden = false;
+          $("finalScore").textContent = elapsed.toFixed(1);
+          $("rankBadge").textContent = rank[0] + " " + rank[1];
+          $("resultBest").textContent = best.toFixed(1) + "s";
+          $("resultDistance").textContent = lastDistance + " px";
+          $("resultMessage").textContent = rank[2];
+          $("newRecord").classList.toggle("show", isNewRecord);
+          $("start").textContent = "MAIN LAGI";
+          $("overlay").classList.remove("hidden");
+        }
+        function start() {
+          elapsed = 0;
+          player.x = W * 0.28;
+          player.y = H * 0.55;
+          chicken.x = W * 0.76;
+          chicken.y = H * 0.3;
+          chicken.speed = 95;
+          hitFlash = 0;
+          running = true;
+          Object.keys(keys).forEach((k) => (keys[k] = false));
+          $("time").textContent = "0.0";
+          $("distance").textContent = "—";
+          $("title").textContent = "AYAMNYA NGAMUK! 🐔";
+          $("desc").style.display = "";
+          $("resultPanel").hidden = true;
+          $("newRecord").classList.remove("show");
+          $("resultCard").classList.remove("game-over-card");
+          $("start").textContent = "MULAI KABUR!";
+          lastDistance = 0;
+          $("overlay").classList.add("hidden");
+        }
+        function frame(t) {
+          const dt = Math.min(0.035, (t - last) / 1000 || 0);
+          last = t;
+          update(dt);
+          draw();
+          requestAnimationFrame(frame);
+        }
+        const map = {
+          ArrowUp: "up",
+          w: "up",
+          W: "up",
+          ArrowDown: "down",
+          s: "down",
+          S: "down",
+          ArrowLeft: "left",
+          a: "left",
+          A: "left",
+          ArrowRight: "right",
+          d: "right",
+          D: "right",
+        };
+        document.addEventListener("keydown", (e) => {
+          if (map[e.key]) {
+            e.preventDefault();
+            keys[map[e.key]] = true;
+          }
+          if (e.key === "Enter" && !running) $("start").click();
+        });
+        document.addEventListener("keyup", (e) => {
+          if (map[e.key]) keys[map[e.key]] = false;
+        });
+        document.querySelectorAll("[data-dir]").forEach((btn) => {
+          const dir = btn.dataset.dir;
+          const down = (e) => {
+            e.preventDefault();
+            keys[dir] = true;
+          };
+          const up = (e) => {
+            e.preventDefault();
+            keys[dir] = false;
+          };
+          btn.addEventListener("pointerdown", down);
+          btn.addEventListener("pointerup", up);
+          btn.addEventListener("pointerleave", up);
+          btn.addEventListener("pointercancel", up);
+        });
+        $("start").addEventListener("click", start);
+        draw();
+        requestAnimationFrame(frame);
+      })();
+    </script>
+  </body>
+</html>
